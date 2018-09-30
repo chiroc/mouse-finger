@@ -1,8 +1,8 @@
 const electron = require('electron');
 const {app, BrowserWindow, globalShortcut, Menu, Tray, shell, ipcMain, webContents, Notification} = electron;
 
-const mouse = require('./main-process/mouse').mouse;
-const {MouseKeys} = require('./main-process/include/mouseMetrics');
+const mouseClick = require('./main-process/mouse-click.js').mouseClick;
+const mousePointer = require('./main-process/mouse-pointer.js').mousePointer;
 
 let win = null;
 let tray = null;
@@ -13,7 +13,7 @@ let _ = {
         app.on('ready', () => {
             this.createWindow();
             this.createMenusAndTray();
-            mouse.registerEvent();
+            mouseClick.registerEvent();
 
             this.registerShortcut();
         });
@@ -36,66 +36,38 @@ let _ = {
     registerShortcut() {
         // 切换左右键及指针
         globalShortcut.register('Ctrl+`', () => {
-            if (mouse.getMouseState()) {
-                mouse.setAsRightClick().setAsLeftCursor();
-                mouse.setRightKeyAutoClick();
+            if (mousePointer.getMouseState()) {
+                mousePointer.setAsRightClick().setAsLeftCursor();
+                mouseClick.setRightKeyAutoClick();
             } else {
-                mouse.setAsLeftClick().setAsRightCursor();
-                mouse.setLefKeyAutoClick();
+                mousePointer.setAsLeftClick().setAsRightCursor();
+                mouseClick.setLefKeyAutoClick();
             }
 
-            // console.log(`Mouse cursor changed:${mouse.getMouseState() ? 'Left' : 'Right'}`);
+            // console.log(`Mouse cursor changed:${mousePointer.getMouseState() ? 'Left' : 'Right'}`);
         });
 
         // 切换左右单击
         globalShortcut.register('Ctrl+Alt+`', () => {
-            if (mouse.getMouseState()) {
-                mouse.setAsRightClick();
-                mouse.setRightKeyAutoClick();
+            if (mousePointer.getMouseState()) {
+                mousePointer.setAsRightClick();
+                mouseClick.setRightKeyAutoClick();
             } else {
-                mouse.setAsLeftClick();
-                mouse.setLefKeyAutoClick();
+                mousePointer.setAsLeftClick();
+                mouseClick.setLefKeyAutoClick();
             }
 
-            // console.log(`Mouse click changed:${mouse.getMouseState() ? 'Left' : 'Right'}`);
+            // console.log(`Mouse click changed:${mousePointer.getMouseState() ? 'Left' : 'Right'}`);
         });
 
         // 开启和暂停自动点击操作
         globalShortcut.register('Alt+F1', () => {
-            mouse.toggleMouseKey(mouse.getMouseState());
-            mouse.togglePaused();
+            mouseClick.toggleMouseKey(mousePointer.getMouseState());
+            mouseClick.togglePaused();
         });
     },
-    setPointerMode(params) {
-        if (params === MouseKeys.LEFT) {
-            mouse.setAsRightClick().setAsLeftCursor();
-            mouse.setRightKeyAutoClick();
-        } else {
-            mouse.setAsLeftClick().setAsRightCursor();
-            mouse.setLefKeyAutoClick();
-        }
-    },
-    setClickKey(params) {
-        if (params === MouseKeys.RIGHT) {
-            mouse.setAsRightClick();
-            mouse.setRightKeyAutoClick();
-        } else {
-            mouse.setAsLeftClick();
-            mouse.setLefKeyAutoClick();
-        }
-    },
-    setAutoClick(params, time) {
-        if (params === 'on') {
-            mouse.startAutoClick();
-            time && mouse.setTickingInterval(parseInt(time, 10));
-        } else {
-            mouse.pauseAutoClick();
-        }
-    },
-    setTime(time){
-        console.log('t:', time);
-        mouse.setTickingInterval(parseInt(time, 10));
-    },
+    setLeftPointerMode(){},
+    setRightPointerMode(){},
     createWindow() {
         win = new BrowserWindow({
             title: 'Mouse Settings',
@@ -168,10 +140,3 @@ let _ = {
 
 _.init();
 
-
-exports.calls = {
-    setPointerMode: _.setPointerMode,
-    setClickKey: _.setClickKey,
-    setAutoClick: _.setAutoClick,
-    setTime: _.setTime
-};

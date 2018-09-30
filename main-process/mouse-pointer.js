@@ -4,6 +4,7 @@ const {app} = electron;
 
 const {SystemMetrics, Cursors} = require('./include/mouseMetrics');
 let user32 = require('./include/user32').user32;
+let pointerMode = true; // true-left; false-right
 
 /**
  * 修改鼠标指针模块
@@ -33,6 +34,9 @@ let _ = {
 
         return this;
     },
+    getPointerMode(){
+        return pointerMode;
+    },
     /**
      * 设置为左手鼠标
      * @returns {_}
@@ -42,6 +46,8 @@ let _ = {
         user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_HAND_FILE_LEFT)), Cursors.OCR_HAND);
         user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_HELP_FILE_LEFT)), Cursors.OCR_HELP);
         user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_APPSTARTING_FILE_LEFT)), Cursors.OCR_APPSTARTING);
+
+        pointerMode = true;
         return this;
     },
     /**
@@ -61,6 +67,8 @@ let _ = {
         user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_HAND_FILE)), Cursors.OCR_HAND);
         user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_HELP_FILE)), Cursors.OCR_HELP);
         user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_APPSTARTING_FILE)), Cursors.OCR_APPSTARTING);
+
+        pointerMode = false;
         return this;
     }
 };

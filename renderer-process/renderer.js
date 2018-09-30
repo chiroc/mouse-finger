@@ -1,29 +1,35 @@
 const electron = require('electron'); //{clipboard, crashReporter, desktopCapturer, ipcRenderer, nativeImage, remote, screen, shell, webFrame}
 const {clipboard, crashReporter, desktopCapturer, ipcRenderer, nativeImage, remote, screen, shell, webFrame} = electron;
-
-const electronRemote = electron.remote; // 返回主进程大多数对象
-// const {app} = electronRemote;
+const calls = electron.remote.require('./main').calls;
 
 let _ = {
     init() {
         this.register();
+        this.renderFormFields();
     },
     register() {
         document.querySelectorAll('[name=cursorModel]').forEach(el => {
             el.addEventListener('click', function () {
-                console.log(this.value);
+                calls.setPointerMode(this.value);
             }, false);
         });
 
         document.querySelectorAll('[name=clickModel]').forEach(el => {
             el.addEventListener('click', function () {
-                console.log(this.value);
+                calls.setClickKey(this.value);
             }, false);
         });
 
         document.querySelectorAll('[name=autoClick]').forEach(el => {
             el.addEventListener('click', function () {
-                console.log(this.value);
+                calls.setAutoClick(this.value);
+
+                if (this.value === 'on') {
+                    document.querySelector('#timeout').setAttribute('disabled', 'disabled');
+                    calls.setTime(document.querySelector('#timeout').value);
+                } else {
+                    document.querySelector('#timeout').removeAttribute('disabled');
+                }
             }, false);
         });
 
@@ -32,8 +38,11 @@ let _ = {
         }, false);
 
         document.querySelector('#timeout').addEventListener('blur', function (event) {
-            console.log(this.value);
+            calls.setTime(this.value);
         }, false);
+    },
+    renderFormFields() {
+
     }
 };
 
