@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mouse Finger</title>
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei UI Light", "Helvetica Neue", "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Open Sans", sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            padding: 5px;
+        }
+
+        form {
+            -webkit-user-select: none;
+            -webkit-app-region: drag;
+        }
+
+        form .form-item {
+            padding: 10px 0;
+        }
+
+        form .form-item label {
+            padding-left: 15px;
+            font-size: 14px;
+        }
+
+        form .form-item .item {
+            border-bottom: 1px solid #e0e5e6;
+            background-color: #f6f8f8;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        form .number {
+            padding: 2px 5px;
+            margin: 0 3px;
+            width: 80px;
+            text-align: center;
+        }
+
+        form input[type=radio], form input[type=checkbox] {
+            vertical-align: -2px;
+            margin-right: 3px;
+        }
+
+        form input[type=radio]:focus, form input[type=checkbox]:focus{
+            outline: none;
+        }
+
+        form input[type=text] {
+            border: 1px solid #e0e5e6;
+        }
+
+        form input[type=text]:focus {
+            border: 1px solid #0da396;
+            outline: none;
+        }
+
+        header {
+            font-size: 20px;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        footer {
+            margin-top: 10px;
+            padding: 10px;
+            border-top: 1px dotted #ccc;
+            text-align: center;
+        }
+        footer span{
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+<header>Mouse Finger</header>
+<form action="/">
+    <div class="form-item">
+        <div class="item" title="同时切换左右鼠标指针和点击键"><strong>切换指针模式（Ctrl+`）</strong></div>
+        <label title="左手指针：鼠标右键为点击键"><input id="cursor-model-left" name="cursorModel" type="radio" value="left"><span>左手指针</span></label>
+        <label title="右手指针：鼠标左键为点击键"><input id="cursor-model-right" name="cursorModel" type="radio" value="right" checked><span>右手指针</span></label>
+    </div>
+
+    <div class="form-item">
+        <div class="item" title="独立切换鼠标点击键，不影响指针显示"><strong>切换点击键（Ctrl+Alt+`）</strong></div>
+        <label><input id="click-model-left" name="clickModel" type="radio" value="left" checked><span>左键点击</span></label>
+        <label><input id="click-model-right" name="clickModel" type="radio" value="right"><span>右键点击</span></label>
+    </div>
+
+    <div class="form-item">
+        <div class="item" title="鼠标停止移动并超时后触发点击事件"><strong>自动鼠标点击（Alt+F1）</strong></div>
+        <label><input id="auto-click-off" name="autoClick" type="radio" value="off" checked><span>关闭</span></label>
+        <label><input id="auto-click-on" name="autoClick" type="radio" value="on"><span>开启</span></label>
+        <label for="timeout">超时<input type="text" class="number" name="timeout" id="timeout" value="300" maxlength="7"><span>毫秒点击</span></label>
+    </div>
+</form>
+
+<footer>
+    <span id="project-link" title="访问项目">Mouse Finger - v1.0.0</span>
+</footer>
+
+<script>
+    require('../renderer-process/renderer.js');
+</script>
+</body>
+</html>
