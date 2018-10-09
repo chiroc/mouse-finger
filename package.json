@@ -1,7 +1,7 @@
 {
-  "name": "electron-quick-start",
+  "name": "mouse-finger",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Mouse Finger",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -19,12 +19,13 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^2.0.0",
-    "ffi": "^2.2.0"
+    "electron-packager": "^12.2.0"
   },
   "dependencies": {
     "charm": "^1.0.2",
     "iohook": "^0.2.0",
-    "robotjs": "^0.5.1"
+    "robotjs": "^0.5.1",
+    "ffi": "^2.2.0"
   },
   "iohook": {
     "targets": [
