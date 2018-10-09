@@ -1,4 +1,6 @@
 # packager
+- https://github.com/electron-userland/electron-packager
+
 ```
 # for use in npm scripts
 npm install electron-packager --save-dev
