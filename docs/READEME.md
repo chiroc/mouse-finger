@@ -10,3 +10,5 @@ npm install electron-packager -g
 ```
 
 `electron-packager mouse-finger --platform=win32 --arch=x64`
+
+` asar pack mouse-finger app.asar`
