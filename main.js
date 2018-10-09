@@ -22,7 +22,6 @@ let _ = {
         app.on('window-all-closed', () => {
             win = null;
             tray = null;
-            mouse.destroy();
 
             if (process.platform !== 'darwin') {
                 app.quit();

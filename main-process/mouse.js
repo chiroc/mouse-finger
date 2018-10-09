@@ -34,7 +34,6 @@ let _ = {
      * @param params
      */
     updateParams(params) {
-        console.log('Params:', params);// TIP
         Object.assign(defaults, params);
 
         if (defaults.pointerMode === MouseKeys.RIGHT) {
@@ -162,9 +161,13 @@ let _ = {
             }, defaults.tickingInterval);
         });
 
-        ioHook.on('mouseclick', event => {
-            // console.log('mouseclick:', event);
-        });
+        // ioHook.on('mouseclick', event => {
+        //     // console.log('mouseclick:', event);
+        // });
+        // ioHook.on('mousewheel', event => {
+        //     // console.log('mousewheel:', event);
+        // });
+
         ioHook.on('mousedown', event => {
             // console.log('mousedown:', event);
             clearTimeout(ticking);
@@ -178,10 +181,6 @@ let _ = {
             isLocked = true;
             clearTimeout(ticking);
         });
-        ioHook.on('mousewheel', event => {
-            // console.log('mousewheel:', event);
-        });
-
         ioHook.on('keydown', event => {
             // console.log('keydown:', JSON.stringify(event));
             isLocked = true;
@@ -194,11 +193,18 @@ let _ = {
         // Register and start hook
         ioHook.start(false);
     },
+    /**
+     * Quit error stack: https://github.com/WilixLead/iohook/issues/69
+     */
     destroy() {
         clearTimeout(ticking);
-        ioHook.stop();
         ioHook.unload();
+        ioHook.stop();
     }
 };
+
+app.on('before-quit', () => {
+    _.destroy();
+});
 
 exports.mouse = _;
