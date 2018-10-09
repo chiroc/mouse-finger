@@ -8,17 +8,58 @@ const {app} = electron;
 const {SystemMetrics, Cursors, MouseKeys} = require('./include/mouseMetrics');
 let user32 = require('./include/user32').user32;
 
-let pointerMode = true; // true-left; false-right
+/**
+ * 自动点击鼠标定时器
+ * @type {null}
+ */
 let ticking = null;
-let tickingInterval = 300;
-let isPaused = true;
-let mouseKey = MouseKeys.LEFT;
+
+let defaults = {
+    pointerMode: MouseKeys.RIGHT, // 指针左右手指针模式
+    mouseKey: MouseKeys.LEFT, // 鼠标自动点击左右键标识
+    tickingInterval: 300, // 自动点击鼠标定时时长（ms）
+    isPaused: true // 自动点击鼠标暂停状态
+};
 
 let _ = {
     /**
-     * 获取当前点击键状态
-     * @returns {boolean} true-Left; false-right
-     * @returns {boolean} true-Left; false-right
+     * Get defaults params.
+     * @returns {{pointerMode: string, mouseKey: string, tickingInterval: number, isPaused: boolean}}
+     */
+    getParams() {
+        return defaults;
+    },
+    /**
+     * Update defaults params & actions.
+     * @param params
+     */
+    updateParams(params) {
+        console.log('Params:', params);// TIP
+        Object.assign(defaults, params);
+
+        if (defaults.pointerMode === MouseKeys.RIGHT) {
+            this.setAsRightCursor();
+            this.setAsLeftClick();
+        } else {
+            this.setAsLeftCursor();
+            this.setAsRightClick();
+        }
+
+        if (defaults.mouseKey === MouseKeys.RIGHT) {
+            this.setAsRightClick();
+        } else {
+            this.setAsLeftClick();
+        }
+
+        if (defaults.isPaused) {
+            this.pauseAutoClick();
+        } else {
+            this.startAutoClick();
+        }
+    },
+    /**
+     * 获取当前系统点击键状态
+     * @returns {boolean} true-Left key click; false-right key click
      */
     getMouseState() {
         return !user32.GetSystemMetrics(SystemMetrics.SM_SWAPBUTTON);
@@ -33,19 +74,26 @@ let _ = {
     },
     /**
      * 设置为左键单击
-     * @returns {boolean} 是否设置成功
      */
     setAsLeftClick() {
         user32.SwapMouseButton(false);
-
-        return this;
-    },
-    getPointerMode() {
-        return pointerMode;
+        defaults.mouseKey = MouseKeys.LEFT;
     },
     /**
-     * 设置为左手鼠标
-     * @returns {_}
+     * 设置为右键单击
+     */
+    setAsRightClick() {
+        user32.SwapMouseButton(true);
+        defaults.mouseKey = MouseKeys.RIGHT;
+    },
+    /**
+     * 切换左右点击键
+     */
+    toggleKeyClick() {
+        this.getMouseState() ? this.setAsRightClick() : this.setAsLeftClick();
+    },
+    /**
+     * 设置为左手鼠标模式
      */
     setAsLeftCursor() {
         let ret = user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_NORMAL_FILE_LEFT)), Cursors.OCR_NORMAL);
@@ -53,20 +101,10 @@ let _ = {
         user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_HELP_FILE_LEFT)), Cursors.OCR_HELP);
         user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_APPSTARTING_FILE_LEFT)), Cursors.OCR_APPSTARTING);
 
-        pointerMode = true;
-        return this;
+        defaults.pointerMode = MouseKeys.LEFT;
     },
     /**
-     * 设置为右键单击
-     */
-    setAsRightClick() {
-        user32.SwapMouseButton(true);
-
-        return this;
-    },
-    /**
-     * 设置为右手鼠标
-     * @returns {_}
+     * 设置为右手鼠标模式
      */
     setAsRightCursor() {
         let ret = user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_NORMAL_FILE)), Cursors.OCR_NORMAL);
@@ -74,48 +112,31 @@ let _ = {
         user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_HELP_FILE)), Cursors.OCR_HELP);
         user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_APPSTARTING_FILE)), Cursors.OCR_APPSTARTING);
 
-        pointerMode = false;
-        return this;
+        defaults.pointerMode = MouseKeys.RIGHT;
     },
 
     //////////////////////////////////////////////////////////////
 
-    setLefKeyAutoClick() {
-        mouseKey = MouseKeys.LEFT;
+    /**
+     * 暂停自动点击
+     */
+    pauseAutoClick() {
+        defaults.isPaused = true;
     },
-    setRightKeyAutoClick() {
-        mouseKey = MouseKeys.RIGHT;
+    /**
+     * 开始自动点击
+     */
+    startAutoClick() {
+        defaults.isPaused = false;
     },
+    /**
+     * 切换自动点击状态
+     */
     togglePaused() {
-        isPaused = !isPaused;
-    },
-    pauseAutoClick(){
-        isPaused = true;
-    },
-    startAutoClick(){
-        isPaused = false;
-    },
-    getAutoClickState() {
-        return isPaused;
-    },
-    toggleMouseKey(state) {
-        mouseKey = state ? MouseKeys.LEFT : MouseKeys.RIGHT;
+        defaults.isPaused = !defaults.isPaused;
     },
     setTickingInterval(time) {
-        console.log('time:', time);
-
-        if (time < 100) {
-            tickingInterval = 100;
-        }
-
-        if (time > 999999) {
-            tickingInterval = 999999;
-        }
-
-        tickingInterval = time;
-    },
-    getTickingInterval() {
-        return tickingInterval;
+        defaults.tickingInterval = time;
     },
     registerEvent() {
         let isLocked = false;
@@ -131,19 +152,14 @@ let _ = {
                 clearTimeout(ticking);
             }
 
-            // console.log('ticking...', isLocked, isPaused);
-
             //按住 ctrl 可以暂停自动点击
-            if (isLocked || isPaused || event.ctrlKey || event.altKey || event.shiftKey) {
-                //clearTimeout(ticking);
+            if (isLocked || defaults.isPaused || event.ctrlKey || event.altKey || event.shiftKey) {
                 return;
             }
 
             ticking = setTimeout(() => {
-                // console.log('ticking... step over.');
-
-                robot.mouseClick(mouseKey, false);
-            }, tickingInterval);
+                robot.mouseClick(defaults.mouseKey, false);
+            }, defaults.tickingInterval);
         });
 
         ioHook.on('mouseclick', event => {

@@ -1,4 +1,4 @@
-var ffi = require('ffi');
+let ffi = require('ffi');
 
 /**
  * ffi.Library(libraryFile, { functionSymbol: [ returnType, [ arg1Type, arg2Type, ... ], ... ]);

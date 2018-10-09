@@ -2,7 +2,7 @@ const electron = require('electron');
 const {app, BrowserWindow, globalShortcut, Menu, Tray, shell, ipcMain, webContents, Notification} = electron;
 
 const mouse = require('./main-process/mouse').mouse;
-const {MouseKeys} = require('./main-process/include/mouseMetrics');
+const {MouseKeys, MouseKeysLabel_ZHCN} = require('./main-process/include/mouseMetrics');
 
 let win = null;
 let tray = null;
@@ -16,11 +16,13 @@ let _ = {
             mouse.registerEvent();
 
             this.registerShortcut();
+            this.registerEvent();
         });
 
         app.on('window-all-closed', () => {
             win = null;
             tray = null;
+            mouse.destroy();
 
             if (process.platform !== 'darwin') {
                 app.quit();
@@ -33,85 +35,65 @@ let _ = {
             }
         });
     },
+    registerEvent(){
+        ipcMain.on('params-updated', (event, arg) => {
+           this.updateTray(arg);
+        });
+    },
+    /**
+     * 注册系统全局快捷键
+     */
     registerShortcut() {
-        // 切换左右键及指针
+        // 切换左右键及指针。同时会切换为对应的点击键（左手指针为右键点击，右手指针为左手点击）。
         globalShortcut.register('Ctrl+`', () => {
-            if (mouse.getMouseState()) {
-                mouse.setAsRightClick().setAsLeftCursor();
-                mouse.setRightKeyAutoClick();
+            if (mouse.getParams().pointerMode === MouseKeys.LEFT) {
+                mouse.setAsRightCursor();
+                mouse.setAsLeftClick();
             } else {
-                mouse.setAsLeftClick().setAsRightCursor();
-                mouse.setLefKeyAutoClick();
+                mouse.setAsLeftCursor();
+                mouse.setAsRightClick();
             }
 
-            // console.log(`Mouse cursor changed:${mouse.getMouseState() ? 'Left' : 'Right'}`);
+            win.webContents.send('shortcut-event', mouse.getParams());
+            this.updateTray();
         });
 
-        // 切换左右单击
+        // 只切换左右单击键。
         globalShortcut.register('Ctrl+Alt+`', () => {
             if (mouse.getMouseState()) {
                 mouse.setAsRightClick();
-                mouse.setRightKeyAutoClick();
             } else {
                 mouse.setAsLeftClick();
-                mouse.setLefKeyAutoClick();
             }
 
-            // console.log(`Mouse click changed:${mouse.getMouseState() ? 'Left' : 'Right'}`);
+            win.webContents.send('shortcut-event', mouse.getParams());
+            this.updateTray();
         });
 
         // 开启和暂停自动点击操作
         globalShortcut.register('Alt+F1', () => {
-            mouse.toggleMouseKey(mouse.getMouseState());
             mouse.togglePaused();
+
+            win.webContents.send('shortcut-event', mouse.getParams());
+            this.updateTray();
         });
-    },
-    setPointerMode(params) {
-        if (params === MouseKeys.LEFT) {
-            mouse.setAsRightClick().setAsLeftCursor();
-            mouse.setRightKeyAutoClick();
-        } else {
-            mouse.setAsLeftClick().setAsRightCursor();
-            mouse.setLefKeyAutoClick();
-        }
-    },
-    setClickKey(params) {
-        if (params === MouseKeys.RIGHT) {
-            mouse.setAsRightClick();
-            mouse.setRightKeyAutoClick();
-        } else {
-            mouse.setAsLeftClick();
-            mouse.setLefKeyAutoClick();
-        }
-    },
-    setAutoClick(params, time) {
-        if (params === 'on') {
-            mouse.startAutoClick();
-            time && mouse.setTickingInterval(parseInt(time, 10));
-        } else {
-            mouse.pauseAutoClick();
-        }
-    },
-    setTime(time){
-        console.log('t:', time);
-        mouse.setTickingInterval(parseInt(time, 10));
     },
     createWindow() {
         win = new BrowserWindow({
             title: 'Mouse Settings',
             icon: appPath + '/assets/logo.png',
             autoHideMenuBar: true,
-            width: 500,
-            height: 420,
+            width: 350,
+            height: 490,
             frame: true,
-            // resizable: false, //FIXME
+            resizable: false, //FIXME
             closable: true
         });
 
-        // win.setMenu(null); // FIXME
+        win.setMenu(null); // FIXME
 
         win.loadFile(appPath + '/sections/index.html');
-        //win.hide(); //FIXME
+        win.hide(); //FIXME
 
         win.on('closed', () => {
             win = null;
@@ -135,8 +117,7 @@ let _ = {
             return;
         }
 
-
-        tray = new Tray(appPath + '/assets/logo.png');
+        tray = new Tray(appPath + '/assets/mouse.png');
 
         const contextMenu = Menu.buildFromTemplate([{
             label: '设置（Settings）',
@@ -155,11 +136,27 @@ let _ = {
         }]);
 
         tray.setToolTip('Mouse Finger');
+        // tray.setTitle('Mouse Finger');
         tray.setContextMenu(contextMenu);
 
         tray.on('double-click', () => {
             this.toggleWin();
         });
+
+        _.updateTray();
+    },
+    /**
+     * 更新系统托盘图标和提示信息
+     * @param {object} [params]
+     */
+    updateTray(params){
+        if(!params){
+            params = mouse.getParams();
+        }
+
+        tray.setImage(appPath + `/assets/mouse-${params.mouseKey}-${params.isPaused ? 'manual' : 'auto'}.png`);
+
+        tray.setToolTip(`${MouseKeysLabel_ZHCN[params.pointerMode]}手指针|${MouseKeysLabel_ZHCN[params.mouseKey]}键点击|${params.isPaused ? '手动': '自动'}点击`);
     },
     toggleWin() {
         win.isVisible() ? win.hide() : win.show();
@@ -167,11 +164,3 @@ let _ = {
 };
 
 _.init();
-
-
-exports.calls = {
-    setPointerMode: _.setPointerMode,
-    setClickKey: _.setClickKey,
-    setAutoClick: _.setAutoClick,
-    setTime: _.setTime
-};

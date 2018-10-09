@@ -36,3 +36,8 @@ exports.MouseKeys = {
     LEFT: 'left',
     RIGHT: 'right'
 };
+
+exports.MouseKeysLabel_ZHCN = {
+    left: '左',
+    right: '右'
+};

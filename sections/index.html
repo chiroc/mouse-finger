@@ -51,7 +51,7 @@
             margin-right: 3px;
         }
 
-        form input[type=radio]:focus, form input[type=checkbox]:focus{
+        form input[type=radio]:focus, form input[type=checkbox]:focus {
             outline: none;
         }
 
@@ -64,6 +64,24 @@
             outline: none;
         }
 
+        .btn-large {
+            display: inline-block;
+            width: 300px;
+            background-color: #0da396;
+            color: #fff;
+            padding: 10px;
+            margin: 10px;
+            border: none;
+        }
+
+        .btn-large:hover {
+            background-color: #0d9285;
+        }
+
+        .btn-large:active, .btn-large:focus, input:focus, input:active{
+            outline: none;
+        }
+
         header {
             font-size: 20px;
             padding: 10px 0;
@@ -72,36 +90,46 @@
 
         footer {
             margin-top: 10px;
-            padding: 10px;
+            padding: 5px;
             border-top: 1px dotted #ccc;
             text-align: center;
+            font-size: 12px;
         }
-        footer span{
+
+        footer span {
             cursor: pointer;
+        }
+
+        .text-center{
+            text-align: center;
         }
 
     </style>
 </head>
 <body>
 <header>Mouse Finger</header>
-<form action="/">
+<form action="/" id="frm" name="frm">
     <div class="form-item">
         <div class="item" title="同时切换左右鼠标指针和点击键"><strong>切换指针模式（Ctrl+`）</strong></div>
-        <label title="左手指针：鼠标右键为点击键"><input id="cursor-model-left" name="cursorModel" type="radio" value="left"><span>左手指针</span></label>
-        <label title="右手指针：鼠标左键为点击键"><input id="cursor-model-right" name="cursorModel" type="radio" value="right" checked><span>右手指针</span></label>
+        <label title="左手指针：鼠标右键为点击键"><input id="cursor-model-left" name="pointerMode" type="radio" value="left"><span>左手指针</span></label>
+        <label title="右手指针：鼠标左键为点击键"><input id="cursor-model-right" name="pointerMode" type="radio" value="right"><span>右手指针</span></label>
     </div>
 
     <div class="form-item">
         <div class="item" title="独立切换鼠标点击键，不影响指针显示"><strong>切换点击键（Ctrl+Alt+`）</strong></div>
-        <label><input id="click-model-left" name="clickModel" type="radio" value="left" checked><span>左键点击</span></label>
-        <label><input id="click-model-right" name="clickModel" type="radio" value="right"><span>右键点击</span></label>
+        <label><input id="click-model-left" name="mouseKey" type="radio" value="left"><span>左键点击</span></label>
+        <label><input id="click-model-right" name="mouseKey" type="radio" value="right"><span>右键点击</span></label>
     </div>
 
     <div class="form-item">
-        <div class="item" title="鼠标停止移动并超时后触发点击事件"><strong>自动鼠标点击（Alt+F1）</strong></div>
-        <label><input id="auto-click-off" name="autoClick" type="radio" value="off" checked><span>关闭</span></label>
-        <label><input id="auto-click-on" name="autoClick" type="radio" value="on"><span>开启</span></label>
-        <label for="timeout">超时<input type="number" class="number" name="timeout" id="timeout" value="300" maxlength="7"><span>毫秒点击</span></label>
+        <div class="item" title="鼠标停止移动并超时后触发点击事件"><strong>自动点击鼠标（Alt+F1）</strong></div>
+        <label><input id="auto-click-off" name="isPaused" type="radio" value="off"><span>关闭</span></label>
+        <label><input id="auto-click-on" name="isPaused" type="radio" value="on"><span>开启</span></label>
+        <label for="timeout">超时<input type="number" class="number" name="tickingInterval" id="timeout" value="" maxlength="7"><span>毫秒点击</span></label>
+    </div>
+
+    <div class="form-item text-center">
+        <button type="button" id="submit" class="btn-large">保存配置并应用</button>
     </div>
 </form>
 
