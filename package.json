@@ -5,7 +5,9 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "rebuild": "npm rebuild --runtime=electron --target=2.0.0 --disturl=https://atom.io/download/atom-shell --abi=57"
+    "rebuild": "npm rebuild --runtime=electron --target=2.0.0 --disturl=https://atom.io/download/atom-shell --abi=57",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -15,10 +17,11 @@
     "tutorial",
     "demo"
   ],
-  "author": "GitHub",
+  "author": "Chiroc Cai",
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^2.0.0",
+    "electron-builder": "^20.28.4",
     "electron-packager": "^12.2.0"
   },
   "dependencies": {
@@ -41,5 +44,12 @@
       "x64",
       "ia32"
     ]
+  },
+  "build": {
+    "appId": "com.mouse-finger.app",
+    "win": {
+      "target": "zip",
+      "icon": "assets/logo.ico"
+    }
   }
 }
