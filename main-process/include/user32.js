@@ -1,3 +1,7 @@
+/**
+ * TIP: 因为项目在打包为 .asar 包文件之后通过 node-ffi 调用系统API时无法读取包内静态文件，所以在打包时需要将相关文件排除在包外。
+ * @see https://github.com/electron/electron/issues/782
+ */
 let ffi = require('ffi');
 
 /**

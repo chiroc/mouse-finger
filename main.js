@@ -1,5 +1,5 @@
 const electron = require('electron');
-const {app, BrowserWindow, globalShortcut, Menu, Tray, shell, ipcMain, webContents, Notification} = electron;
+const {app, BrowserWindow, globalShortcut, Menu, Tray, ipcMain} = electron;
 
 const mouse = require('./main-process/mouse').mouse;
 const {MouseKeys, MouseKeysLabel_ZHCN} = require('./main-process/include/mouseMetrics');
@@ -34,9 +34,9 @@ let _ = {
             }
         });
     },
-    registerEvent(){
+    registerEvent() {
         ipcMain.on('params-updated', (event, arg) => {
-           this.updateTray(arg);
+            this.updateTray(arg);
         });
     },
     /**
@@ -148,14 +148,14 @@ let _ = {
      * 更新系统托盘图标和提示信息
      * @param {object} [params]
      */
-    updateTray(params){
-        if(!params){
+    updateTray(params) {
+        if (!params) {
             params = mouse.getParams();
         }
 
         tray.setImage(appPath + `/assets/mouse-${params.mouseKey}-${params.isPaused ? 'manual' : 'auto'}.png`);
 
-        tray.setToolTip(`${MouseKeysLabel_ZHCN[params.pointerMode]}手指针|${MouseKeysLabel_ZHCN[params.mouseKey]}键点击|${params.isPaused ? '手动': '自动'}点击`);
+        tray.setToolTip(`${MouseKeysLabel_ZHCN[params.pointerMode]}手指针|${MouseKeysLabel_ZHCN[params.mouseKey]}键点击|${params.isPaused ? '手动' : '自动'}点击`);
     },
     toggleWin() {
         win.isVisible() ? win.hide() : win.show();

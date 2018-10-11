@@ -50,6 +50,7 @@
     "win": {
       "target": "zip",
       "icon": "assets/logo.ico"
-    }
+    },
+    "asarUnpack": "./assets/cursor/*"
   }
 }
