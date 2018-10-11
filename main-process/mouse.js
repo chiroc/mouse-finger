@@ -6,7 +6,7 @@ const electron = require('electron');
 const {app} = electron;
 
 const {SystemMetrics, Cursors, MouseKeys} = require('./include/mouseMetrics');
-let user32 = require('./include/user32').user32;
+let native = require('./include/nativeAPIs').native;
 
 /**
  * 自动点击鼠标定时器
@@ -20,6 +20,7 @@ let defaults = {
     tickingInterval: 300, // 自动点击鼠标定时时长（ms）
     isPaused: true // 自动点击鼠标暂停状态
 };
+
 
 let _ = {
     /**
@@ -61,7 +62,7 @@ let _ = {
      * @returns {boolean} true-Left key click; false-right key click
      */
     getMouseState() {
-        return !user32.GetSystemMetrics(SystemMetrics.SM_SWAPBUTTON);
+        return !native.getSystemMetrics(SystemMetrics.SM_SWAPBUTTON);
     },
     /**
      * 获取鼠标物理路径
@@ -70,20 +71,21 @@ let _ = {
      */
     getCursorPath(fileName) {
         // TIP: 通过electron-builder 打包后被排除的文件夹后面默认加了".unpacked"后缀。
-        return path.resolve(app.getAppPath() + '.unpacked/assets/cursor/' + fileName);
+        return path.resolve(app.getAppPath() + '/assets/cursor/' + fileName);
+        // return path.resolve(app.getAppPath() + '.unpacked/assets/cursor/' + fileName);
     },
     /**
      * 设置为左键单击
      */
     setAsLeftClick() {
-        user32.SwapMouseButton(false);
+        native.swapMouseButton(false);
         defaults.mouseKey = MouseKeys.LEFT;
     },
     /**
      * 设置为右键单击
      */
     setAsRightClick() {
-        user32.SwapMouseButton(true);
+        native.swapMouseButton(true);
         defaults.mouseKey = MouseKeys.RIGHT;
     },
     /**
@@ -96,10 +98,10 @@ let _ = {
      * 设置为左手鼠标模式
      */
     setAsLeftCursor() {
-        user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_NORMAL_FILE_LEFT)), Cursors.OCR_NORMAL);
-        user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_HAND_FILE_LEFT)), Cursors.OCR_HAND);
-        user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_HELP_FILE_LEFT)), Cursors.OCR_HELP);
-        user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_APPSTARTING_FILE_LEFT)), Cursors.OCR_APPSTARTING);
+        native.setSystemCursor(native.loadCursorFromFile(_.getCursorPath(Cursors.OCR_NORMAL_FILE_LEFT)), Cursors.OCR_NORMAL);
+        native.setSystemCursor(native.loadCursorFromFile(_.getCursorPath(Cursors.OCR_HAND_FILE_LEFT)), Cursors.OCR_HAND);
+        native.setSystemCursor(native.loadCursorFromFile(_.getCursorPath(Cursors.OCR_HELP_FILE_LEFT)), Cursors.OCR_HELP);
+        native.setSystemCursor(native.loadCursorFromFile(_.getCursorPath(Cursors.OCR_APPSTARTING_FILE_LEFT)), Cursors.OCR_APPSTARTING);
 
         defaults.pointerMode = MouseKeys.LEFT;
     },
@@ -107,10 +109,10 @@ let _ = {
      * 设置为右手鼠标模式
      */
     setAsRightCursor() {
-        user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_NORMAL_FILE)), Cursors.OCR_NORMAL);
-        user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_HAND_FILE)), Cursors.OCR_HAND);
-        user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_HELP_FILE)), Cursors.OCR_HELP);
-        user32.SetSystemCursor(user32.LoadCursorFromFileA(_.getCursorPath(Cursors.OCR_APPSTARTING_FILE)), Cursors.OCR_APPSTARTING);
+        native.setSystemCursor(native.loadCursorFromFile(_.getCursorPath(Cursors.OCR_NORMAL_FILE)), Cursors.OCR_NORMAL);
+        native.setSystemCursor(native.loadCursorFromFile(_.getCursorPath(Cursors.OCR_HAND_FILE)), Cursors.OCR_HAND);
+        native.setSystemCursor(native.loadCursorFromFile(_.getCursorPath(Cursors.OCR_HELP_FILE)), Cursors.OCR_HELP);
+        native.setSystemCursor(native.loadCursorFromFile(_.getCursorPath(Cursors.OCR_APPSTARTING_FILE)), Cursors.OCR_APPSTARTING);
 
         defaults.pointerMode = MouseKeys.RIGHT;
     },
