@@ -1,0 +1,12 @@
+directories:
+  output: dist
+  buildResources: build
+appId: com.mouse-finger.app
+win:
+  target:
+    target: zip
+    arch:
+      - x64
+  icon: assets/logo.ico
+asarUnpack: ./assets/cursor/*
+electronVersion: 2.0.0
