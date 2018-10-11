@@ -17,6 +17,7 @@
     "cursor",
     "robotjs",
     "ffi",
+    "iohook",
     "user32"
   ],
   "author": "Chiroc Cai",
@@ -26,7 +27,6 @@
     "electron-builder": "^20.28.4"
   },
   "dependencies": {
-    "charm": "^1.0.2",
     "iohook": "^0.2.0",
     "robotjs": "^0.5.1",
     "ffi": "^2.2.0"
