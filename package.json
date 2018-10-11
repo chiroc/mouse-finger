@@ -1,7 +1,7 @@
 {
   "name": "mouse-finger",
   "version": "1.0.0",
-  "description": "Mouse Finger",
+  "description": "A convenient mouse controler.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -12,17 +12,18 @@
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
     "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "mouse",
+    "finger",
+    "cursor",
+    "robotjs",
+    "ffi",
+    "user32"
   ],
   "author": "Chiroc Cai",
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^2.0.0",
-    "electron-builder": "^20.28.4",
-    "electron-packager": "^12.2.0"
+    "electron-builder": "^20.28.4"
   },
   "dependencies": {
     "charm": "^1.0.2",
@@ -41,14 +42,18 @@
       "linux"
     ],
     "arches": [
-      "x64",
-      "ia32"
+      "x64"
     ]
   },
   "build": {
     "appId": "com.mouse-finger.app",
     "win": {
-      "target": "zip",
+      "target": {
+        "target": "zip",
+        "arch": [
+          "x64"
+        ]
+      },
       "icon": "assets/logo.ico"
     },
     "asarUnpack": "./assets/cursor/*"
