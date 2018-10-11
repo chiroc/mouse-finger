@@ -70,8 +70,10 @@ let _ = {
      * @returns {string}
      */
     getCursorPath(fileName) {
-        // TIP: 通过electron-builder 打包后被排除的文件夹后面默认加了".unpacked"后缀。
+        // TIP: 开始环境访问路径
         return path.resolve(app.getAppPath() + '/assets/cursor/' + fileName);
+
+        // TIP: 生产环境访问路径：通过electron-builder 打包后被排除的文件夹后面默认加了".unpacked"后缀。
         // return path.resolve(app.getAppPath() + '.unpacked/assets/cursor/' + fileName);
     },
     /**
