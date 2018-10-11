@@ -1,6 +1,6 @@
 {
   "name": "mouse-finger",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A convenient mouse controler.",
   "main": "main.js",
   "scripts": {
@@ -21,7 +21,7 @@
     "user32"
   ],
   "author": "Chiroc Cai",
-  "license": "CC0-1.0",
+  "license": "MIT",
   "devDependencies": {
     "electron": "^2.0.0",
     "electron-builder": "^20.28.4"
