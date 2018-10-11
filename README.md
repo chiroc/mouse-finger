@@ -38,13 +38,10 @@ __mouse-finger工具适应人群：__
 
 
 ### 安装教程
- 下载最新版本 [mouse-finger](https://gitee.com/chiroc/mouse-finger/releases/) zip文件解压后直接运行 `mouse-finger.exe`。
-
- 也可以手动编译（当然整个过程可能并不是很愉快，要有心理准备）。
 
  安装项目前需要先准备好开发环境（windows）：
 
- - Visual Studio 2013（C/C++编译环境）
+ - Visual Studio 2013（编译环境）
  - Python 2.7
 
 
