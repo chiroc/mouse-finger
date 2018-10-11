@@ -1,7 +1,6 @@
-const electron = require('electron'); //{clipboard, crashReporter, desktopCapturer, ipcRenderer, nativeImage, remote, screen, shell, webFrame}
-const {clipboard, crashReporter, desktopCapturer, ipcRenderer, nativeImage, remote, screen, shell, webFrame} = electron;
+const electron = require('electron');
+const { ipcRenderer, shell} = electron;
 const calls = electron.remote.require('./main-process/calls').calls;
-const {app} = electron.remote;
 
 let _ = {
     init() {
@@ -38,7 +37,7 @@ let _ = {
         });
 
         fields.isPaused = fields.isPaused === 'off';
-        fields.tickingInterval = parseInt(fields.tickingInterval, 10);
+        fields.tickingInterval = _.validTime(fields.tickingInterval);
 
         return fields;
     },
@@ -50,26 +49,27 @@ let _ = {
         document.querySelectorAll(`[name=pointerMode][value=${fields.pointerMode}]`)[0].checked = true;
         document.querySelectorAll(`[name=mouseKey][value=${fields.mouseKey}]`)[0].checked = true;
         document.querySelectorAll(`[name=isPaused][value=${fields.isPaused ? 'off' : 'on'}]`)[0].checked = true;
-        document.querySelector('#timeout').value = fields.tickingInterval;
+        document.querySelector('#timeout').value = _.validTime(fields.tickingInterval);
     },
     /**
      * 验证转换时间
-     * @param {string} time
+     * @param {number|string} time
      * @returns {number}
      */
     validTime(time) {
+        const min = 100, max = 999999;
         if (!time) {
-            return 100;
+            return min;
         }
 
         time = parseInt(time, 10);
 
-        if (time < 100) {
-            time = 100;
+        if (time < min) {
+            time = min;
         }
 
-        if (time > 999999) {
-            time = 999999;
+        if (time > max) {
+            time = max;
         }
 
         return time;
