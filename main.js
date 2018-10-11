@@ -85,14 +85,14 @@ let _ = {
             width: 350,
             height: 490,
             frame: true,
-            resizable: false, //FIXME
+            resizable: false,
             closable: true
         });
 
-        win.setMenu(null); // FIXME
+        win.setMenu(null);
 
         win.loadFile(appPath + '/sections/index.html');
-        win.hide(); //FIXME
+        win.hide();
 
         win.on('closed', () => {
             win = null;
@@ -122,14 +122,14 @@ let _ = {
             label: '设置（Settings）',
             type: 'normal',
             icon: appPath + '/assets/settings.png',
-            click(menuItem, browserWindow, event) {
+            click() {
                 win.show();
             }
         }, {
             label: '退出（Exit）',
             type: 'normal',
             icon: appPath + '/assets/exit.png',
-            click(menuItem, browserWindow, event) {
+            click() {
                 app.quit();
             }
         }]);
@@ -154,7 +154,6 @@ let _ = {
         }
 
         tray.setImage(appPath + `/assets/mouse-${params.mouseKey}-${params.isPaused ? 'manual' : 'auto'}.png`);
-
         tray.setToolTip(`${MouseKeysLabel_ZHCN[params.pointerMode]}手指针|${MouseKeysLabel_ZHCN[params.mouseKey]}键点击|${params.isPaused ? '手动' : '自动'}点击`);
     },
     toggleWin() {
