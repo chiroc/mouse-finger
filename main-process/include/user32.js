@@ -11,11 +11,11 @@ let ffi = require('ffi');
  * - SetSystemCursor, https://docs.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-setsystemcursor
  */
 exports.user32 = ffi.Library('user32', {
-    'GetSystemMetrics': ['int', ['int']],
-    'SwapMouseButton': ['bool', ['bool']],
-    'SetCursor': ['int', ['int']],
-    'SetCursorPos': ['bool', ['int', 'int']],
-    'LoadCursorFromFileA': ['int', ['string']],
-    'LoadCursorFromFileW': ['int', ['string']],
-    'SetSystemCursor': ['bool', ['int', 'int']]
+    GetSystemMetrics: ['int', ['int']],
+    SwapMouseButton: ['bool', ['bool']],
+    SetCursor: ['int', ['int']],
+    SetCursorPos: ['bool', ['int', 'int']],
+    LoadCursorFromFileA: ['int', ['string']],
+    LoadCursorFromFileW: ['int', ['string']],
+    SetSystemCursor: ['bool', ['int', 'int']]
 });
