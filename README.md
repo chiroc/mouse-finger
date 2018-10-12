@@ -29,7 +29,7 @@ __Mouse Finger工具适应人群：__
  __主要依赖库：__
  - [robotjs](https://github.com/octalmage/robotjs), 操作鼠标和键盘。
  - [iohook](https://github.com/WilixLead/iohook), 监听鼠标和键盘事件。
- - [ffi](https://github.com/node-ffi/node-ffi), 调用系统API。
+ - [node-ffi](https://github.com/node-ffi/node-ffi), 调用系统API。
  - [electron-builder](https://github.com/electron-userland/electron-builder), 打包工具。
  - [node-gyp](https://github.com/nodejs/node-gyp)，编译项目时需要（全局安装）。
 
