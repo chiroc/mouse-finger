@@ -6,7 +6,10 @@ let _ = {
     init() {
         let config = this.loadConfig();
         this.renderFormData(config);
+
         calls.setParams(config);
+        ipcRenderer.send('params-updated', config);
+
         this.registerAppEvent();
         this.register();
     },
