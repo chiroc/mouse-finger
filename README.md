@@ -6,9 +6,9 @@
 一个解放鼠标手（指）重度患者的工具。
 
 __主要功能：__
- - 快速切换鼠标左右手指针【Ctrl+`】；
- - 快速切换鼠标左右点击键【Ctrl+Alt+`】；
- - 自动点击鼠标键【Alt+F1】；
+ - 快速切换鼠标左右手指针【Ctrl+`】；/ Swap left and right mouse pointer.
+ - 快速切换鼠标左右点击键【Ctrl+Alt+`】；/ Swap left and right mouse click.
+ - 自动点击鼠标键【Alt+F1】；/ Automatic mouse click.
 
 __Mouse Finger工具适应人群：__
 
