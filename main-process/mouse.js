@@ -71,10 +71,10 @@ let _ = {
      */
     getCursorPath(fileName) {
         // TIP: 开始环境访问路径
-        return path.resolve(app.getAppPath() + '/assets/cursor/' + fileName);
+        // return path.resolve(app.getAppPath() + '/assets/cursor/' + fileName);
 
         // TIP: 生产环境访问路径：通过electron-builder 打包后被排除的文件夹后面默认加了".unpacked"后缀。
-        // return path.resolve(app.getAppPath() + '.unpacked/assets/cursor/' + fileName);
+        return path.resolve(app.getAppPath() + '.unpacked/assets/cursor/' + fileName);
     },
     /**
      * 设置为左键单击
@@ -166,32 +166,20 @@ let _ = {
             }, defaults.tickingInterval);
         });
 
-        // ioHook.on('mouseclick', event => {
-        //     // console.log('mouseclick:', event);
-        // });
-        // ioHook.on('mousewheel', event => {
-        //     // console.log('mousewheel:', event);
-        // });
-
         ioHook.on('mousedown', event => {
-            // console.log('mousedown:', event);
             clearTimeout(ticking);
         });
         ioHook.on('mouseup', event => {
-            // console.log('mouseup:', event);
             isLocked = false;
         });
         ioHook.on('mousedrag', event => {
-            // console.log('mousedrag:', event);
             isLocked = true;
             clearTimeout(ticking);
         });
         ioHook.on('keydown', event => {
-            // console.log('keydown:', JSON.stringify(event));
             isLocked = true;
         });
         ioHook.on('keyup', event => {
-            // console.log('keyup:  ', JSON.stringify(event));
             isLocked = false;
         });
 
