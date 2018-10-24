@@ -42,8 +42,10 @@ __Mouse Finger工具适应人群：__
 
  2) 也可以手动编译（当然整个过程可能并不是很愉快，要有心理准备）。 安装项目前需要先准备好开发环境（windows）：
 
- - Visual Studio 2013（C/C++编译环境）
- - Python 2.7
+  - node -v8.12.0; `--abi=57`
+  - npm -v6.4.1
+  - Visual Studio 2013（C/C++编译环境）
+  - Python 2.7
 
 完成后运行：
 1. `npm install`

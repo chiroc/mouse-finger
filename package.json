@@ -1,11 +1,11 @@
 {
   "name": "mouse-finger",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A convenient mouse controler.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "rebuild": "npm rebuild --runtime=electron --target=2.0.0 --disturl=https://atom.io/download/atom-shell --abi=57",
+    "rebuild": "npm rebuild --runtime=electron --target=2.0.12 --disturl=https://atom.io/download/atom-shell --abi=57",
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
@@ -23,7 +23,7 @@
   "author": "Chiroc Cai",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^2.0.0",
+    "electron": "^2.0.12",
     "electron-builder": "^20.28.4"
   },
   "dependencies": {
