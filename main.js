@@ -33,6 +33,7 @@ let _ = {
                 this.createWindow();
             }
         });
+
     },
     registerEvent() {
         ipcMain.on('params-updated', (event, arg) => {
@@ -158,7 +159,46 @@ let _ = {
     },
     toggleWin() {
         win.isVisible() ? win.hide() : win.show();
+    },
+    activeWin() {
+        if (win) {
+            if (win.isMinimized()) {
+                win.restore();
+            }
+            win.focus();
+        }
     }
 };
 
-_.init();
+
+/**
+ * 只允许一个应用实例
+ * v3.0.x
+ */
+/*
+const isInstanceLocked = app.requestSingleInstanceLock();
+if (!isInstanceLocked) {
+    app.quit();
+} else {
+    app.on('second-instance', (event, commandLine, workingDirectory) => {
+        _.activeWin();
+    });
+
+    _.init();
+}
+*/
+
+
+/**
+ * 只允许一个应用实例
+ * v2.0.x
+ */
+const isSecondInstance = app.makeSingleInstance((commandLine, workingDirectory) => {
+    _.activeWin();
+});
+
+if (isSecondInstance) {
+    app.quit();
+} else {
+    _.init();
+}
